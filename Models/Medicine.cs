@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -31,21 +32,22 @@ public partial class Medicine
 
     public bool IsPrescriptionRequired { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new List<BillDetail>();
-
+    [JsonIgnore]
     public virtual Category? Category { get; set; }
-
+    [JsonIgnore]
     public virtual Company? Company { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<MedicineDisease> MedicineDiseases { get; set; } = new List<MedicineDisease>();
-
+    [JsonIgnore]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
+    [JsonIgnore]
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
-
+    [JsonIgnore]
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
-
+    [JsonIgnore]
     public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
-
+    [JsonIgnore]
     public virtual ICollection<SupplierMedicine> SupplierMedicines { get; set; } = new List<SupplierMedicine>();
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -14,10 +15,10 @@ public partial class Purchase
     public decimal? TotalAmount { get; set; }
 
     public int? CreatedBy { get; set; }
-
+    [JsonIgnore]
     public virtual Admin? CreatedByNavigation { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
-
+    [JsonIgnore]
     public virtual Supplier? Supplier { get; set; }
 }

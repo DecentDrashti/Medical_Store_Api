@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -14,6 +15,6 @@ public partial class Stock
     public int? QuantityAvailable { get; set; }
 
     public DateOnly? ExpiryDate { get; set; }
-
+    [JsonIgnore]
     public virtual Medicine? Medicine { get; set; }
 }

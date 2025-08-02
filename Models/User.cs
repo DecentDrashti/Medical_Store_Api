@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -16,10 +17,10 @@ public partial class User
     public int? RoleId { get; set; }
 
     public DateTime? CreatedAt { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
-
+    [JsonIgnore]
     public virtual Customer? Customer { get; set; }
-
+    [JsonIgnore]
     public virtual Role? Role { get; set; }
 }

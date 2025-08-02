@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -19,7 +20,9 @@ public partial class BillDetail
 
     public DateTime? AddedOn { get; set; }
 
+    [JsonIgnore]
     public virtual Bill? Bill { get; set; }
 
+    [JsonIgnore]
     public virtual Medicine? Medicine { get; set; }
 }

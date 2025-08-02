@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -23,5 +24,6 @@ public partial class DeliveryPayment
 
     public string? Remarks { get; set; }
 
+    [JsonIgnore]
     public virtual Delivery? Delivery { get; set; }
 }

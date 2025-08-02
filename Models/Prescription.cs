@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Medical_Store.Models;
 
@@ -16,8 +17,8 @@ public partial class Prescription
     public DateTime? UploadedOn { get; set; }
 
     public bool? IsApproved { get; set; }
-
+    [JsonIgnore]
     public virtual Customer? Customer { get; set; }
-
+    [JsonIgnore]
     public virtual Medicine? Medicine { get; set; }
 }
