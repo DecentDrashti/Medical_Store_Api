@@ -16,7 +16,7 @@ public partial class User
 
     public int? RoleId { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreatedAt { get; set; } = DateTime.Now;
     [JsonIgnore]
     public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
     [JsonIgnore]

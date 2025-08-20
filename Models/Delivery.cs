@@ -8,21 +8,22 @@ public partial class Delivery
 {
     public int DeliveryId { get; set; }
 
-    public int? BillId { get; set; }
+    public int BillId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public int CustomerId { get; set; }
 
-    public DateOnly? DeliveryDate { get; set; }
+    public DateOnly DeliveryDate { get; set; } = DateOnly.FromDateTime(DateTime.Today);
 
-    public string? DeliveryMethod { get; set; }
+    public string DeliveryMethod { get; set; }
+//eg:-    "Courier""Postal Service""In-store Pickup""Home Delivery""Express Shipping""Drone Delivery""Freight"
 
-    public string? DeliveryAddress { get; set; }
+    public string DeliveryAddress { get; set; }
 
-    public string? DeliveryStatus { get; set; }
+    public string DeliveryStatus { get; set; }
 
-    public string? DeliveredBy { get; set; }
+    public string DeliveredBy { get; set; }
 
-    public string? ContactNumber { get; set; }
+    public string ContactNumber { get; set; }
 
     [JsonIgnore]
     public virtual Bill? Bill { get; set; }

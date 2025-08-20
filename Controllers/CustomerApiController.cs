@@ -71,9 +71,9 @@ namespace Medical_Store.Controllers
             {
                 return NotFound();
             }
+            existingCustomer.UserId = customer.UserId;
             existingCustomer.CustomerName = customer.CustomerName;
             existingCustomer.ContactNumber = customer.ContactNumber;
-            existingCustomer.Email = customer.Email;
             existingCustomer.Address = customer.Address;
             existingCustomer.City = customer.City;
             _context.Customers.Update(existingCustomer);

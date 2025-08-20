@@ -71,8 +71,8 @@ namespace Medical_Store.Controllers
             {
                 return NotFound();
             }
-            existingAdmin.Username = Admin.Username;
-            existingAdmin.PasswordHash = Admin.PasswordHash;
+            existingAdmin.UserId = Admin.UserId;
+            existingAdmin.FullName = Admin.FullName;
             _context.Admins.Update(existingAdmin);
             _context.SaveChanges();
             return NoContent();

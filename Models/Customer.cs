@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Medical_Store.Models;
 
@@ -12,17 +14,19 @@ public partial class Customer
 
     public string CustomerName { get; set; } = null!;
 
-    public string? ContactNumber { get; set; }
+    public string ContactNumber { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
-    public string? City { get; set; }
+    public string City { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Bill> Bills { get; set; } = new List<Bill>();
 
     [JsonIgnore]
-    public virtual User CustomerNavigation { get; set; } = null!;
+    //[NotMapped]
+    //[BindNever]
+    public virtual User? CustomerNavigation { get; set; } = null!;
 
     [JsonIgnore]
     public virtual ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
