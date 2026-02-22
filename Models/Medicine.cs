@@ -31,7 +31,6 @@ public partial class Medicine
     public int? FreeQuantity { get; set; }
 
     public bool IsPrescriptionRequired { get; set; }
-
     [JsonIgnore]
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new List<BillDetail>();
     [JsonIgnore]
@@ -39,15 +38,27 @@ public partial class Medicine
     [JsonIgnore]
     public virtual Company? Company { get; set; }
     [JsonIgnore]
+    public virtual ICollection<DeliveryDetail> DeliveryDetails { get; set; } = new List<DeliveryDetail>();
+    [JsonIgnore]
     public virtual ICollection<MedicineDisease> MedicineDiseases { get; set; } = new List<MedicineDisease>();
     [JsonIgnore]
     public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     [JsonIgnore]
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
-    [JsonIgnore]
+     [JsonIgnore]
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
-    [JsonIgnore]
+     [JsonIgnore]
     public virtual ICollection<Stock> Stocks { get; set; } = new List<Stock>();
-    [JsonIgnore]
+     [JsonIgnore]
     public virtual ICollection<SupplierMedicine> SupplierMedicines { get; set; } = new List<SupplierMedicine>();
+}
+//dropdown model
+public class MedicineDropdown
+{
+    public int MedicineId { get; set; }
+    public string MedicineName { get; set; } = null!;
+    //public decimal Mrp { get; set; }
+    //public decimal Ptr { get; set; }
+    //public int? FreeQuantity { get; set; }
+    //public bool IsPrescriptionRequired { get; set; }
 }

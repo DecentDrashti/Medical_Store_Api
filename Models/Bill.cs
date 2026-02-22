@@ -8,6 +8,8 @@ public partial class Bill
 {
     public int BillId { get; set; }
 
+    public int OrderId { get; set; }
+
     public string InvoiceNumber { get; set; } = null!;
 
     public int? CustomerId { get; set; }
@@ -26,10 +28,16 @@ public partial class Bill
 
     [JsonIgnore]
     public virtual ICollection<BillDetail> BillDetails { get; set; } = new List<BillDetail>();
-
     [JsonIgnore]
     public virtual Customer? Customer { get; set; }
-
     [JsonIgnore]
     public virtual Delivery? Delivery { get; set; }
+    [JsonIgnore]
+    public virtual Order Order { get; set; } = null!;
+}
+public class BillDropdown
+{
+    public int BillId { get; set; }
+    public bool IsPaid { get; set; }
+
 }

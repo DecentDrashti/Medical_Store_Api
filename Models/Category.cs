@@ -9,7 +9,12 @@ public partial class Category
     public int CategoryId { get; set; }
 
     public string CategoryName { get; set; } = null!;
-
     [JsonIgnore]
     public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
+}
+// dropdown model
+public class CategoryDropdown
+{
+    public int CategoryId { get; set; }
+    public string CategoryName { get; set; } = null!;
 }

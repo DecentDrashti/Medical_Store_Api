@@ -21,8 +21,10 @@ public partial class PurchaseDetail
     public DateOnly? MfgDate { get; set; }
 
     public DateOnly? ExpiryDate { get; set; }
+
     [JsonIgnore]
     public virtual Medicine? Medicine { get; set; }
+
     [JsonIgnore]
     public virtual Purchase? Purchase { get; set; }
 }

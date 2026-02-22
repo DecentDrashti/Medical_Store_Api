@@ -1,6 +1,7 @@
 ﻿using Medical_Store.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medical_Store.Controllers
 {
@@ -73,6 +74,7 @@ namespace Medical_Store.Controllers
             }
             existingDelivery.BillId = delivery.BillId;
             existingDelivery.CustomerId = delivery.CustomerId;
+            existingDelivery.OrderId = delivery.OrderId;
             existingDelivery.DeliveryDate = delivery.DeliveryDate;
             existingDelivery.DeliveryMethod = delivery.DeliveryMethod;
             existingDelivery.DeliveryAddress = delivery.DeliveryAddress;
@@ -82,6 +84,53 @@ namespace Medical_Store.Controllers
             _context.Deliveries.Update(existingDelivery);
             _context.SaveChanges();
             return NoContent();
+        }
+        #endregion
+
+        #region Customerdropdown
+        [HttpGet("dropdown/Customer")]
+        public async Task<IActionResult> GetCustomerDropdown()
+        {
+            var customers = await _context.Customers
+                .Select(c => new CustomerDropdown
+                {
+                    CustomerId = c.CustomerId,
+                    CustomerName = c.CustomerName
+                })
+                .ToListAsync();
+
+            return Ok(customers); // must return a valid list
+        }
+        #endregion
+
+        #region billdropdown
+        [HttpGet("dropdown/Bill")]
+        public async Task<IActionResult> GetBillDropdown()
+        {
+            var bills = await _context.Bills
+                .Select(c => new BillDropdown
+                {
+                    BillId = c.BillId,
+                    IsPaid = c.IsPaid
+                })
+                .ToListAsync();
+
+            return Ok(bills); // must return a valid list
+        }
+        #endregion
+
+        #region orderdropdown
+        [HttpGet("dropdown/Order")]
+        public async Task<IActionResult> GetOrderDropdown()
+        {
+            var orders = await _context.Orders
+                .Select(c => new OrderDropdown
+                {
+                    OrderId = c.OrderId,
+                    TotalAmount = c.TotalAmount ?? 0 // Handle null TotalAmount
+                })
+                .ToListAsync();
+            return Ok(orders); // must return a valid list
         }
         #endregion
     }

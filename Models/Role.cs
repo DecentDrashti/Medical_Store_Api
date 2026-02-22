@@ -9,6 +9,13 @@ public partial class Role
     public int RoleId { get; set; }
 
     public string? RoleName { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+}
+public class RolesDropdown
+{
+    public int RoleId { get; set; }
+    public string RoleName { get; set; } =null!;
+
 }

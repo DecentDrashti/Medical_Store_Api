@@ -14,8 +14,10 @@ public partial class Admin
 
     [JsonIgnore]
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
     [JsonIgnore]
     public virtual ICollection<Purchase> Purchases { get; set; } = new List<Purchase>();
+
     [JsonIgnore]
     public virtual User User { get; set; } = null!;
 }

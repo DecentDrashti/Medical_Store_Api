@@ -1,6 +1,7 @@
 ﻿using Medical_Store.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medical_Store.Controllers
 {
@@ -82,5 +83,42 @@ namespace Medical_Store.Controllers
             return NoContent();
         }
         #endregion
+
+        #region MedicineDropDown
+        // Get all Users (for dropdown)
+        [HttpGet("dropdown/Medicine")]
+        public async Task<ActionResult<IEnumerable<object>>> GetMedicines()
+        {
+            return await _context.Medicines
+                .Select(c => new { c.MedicineId, c.MedicineName })
+                .ToListAsync();
+        }
+        #endregion
+
+        // Advanced Filtering Endpoint
+        //#region FilterStocks
+        //[HttpGet("filter")]
+        //public async Task<ActionResult<IEnumerable<Stock>>> Filter(
+        //    [FromQuery] string? MedicineName,
+        //    //[FromQuery] string? QuantityAvailable,
+        //    [FromQuery] string? ExpiryDate)
+        //{
+        //    var query = _context.Stocks
+        //        .Include(c => c.Medicine) // optional, if you want user info
+        //        .AsQueryable();
+
+        //    if (!string.IsNullOrEmpty(MedicineName))
+        //        query = query.Where(c => c.Medicine != null &&
+        //                                 c.Medicine.MedicineName.Contains(MedicineName));
+
+        //    //if (!string.IsNullOrEmpty(QuantityAvailable))
+        //    //    query = query.Where(c => c.QuantityAvailable!=0 && c.QuantityAvailable.Contains(QuantityAvailable));
+
+        //    if (!string.IsNullOrEmpty(ExpiryDate))
+        //        query = query.Where(c => c.ExpiryDate != null && c.ExpiryDate.Contains(ExpiryDate));
+
+        //    return await query.ToListAsync();
+        //}
+        //#endregion
     }
 }

@@ -29,6 +29,8 @@ public partial class MedicalStoreContext : DbContext
 
     public virtual DbSet<Delivery> Deliveries { get; set; }
 
+    public virtual DbSet<DeliveryDetail> DeliveryDetails { get; set; }
+
     public virtual DbSet<DeliveryPayment> DeliveryPayments { get; set; }
 
     public virtual DbSet<DeliveryStaff> DeliveryStaffs { get; set; }
@@ -58,10 +60,6 @@ public partial class MedicalStoreContext : DbContext
     public virtual DbSet<SupplierMedicine> SupplierMedicines { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("server=DESKTOP-3I9H4UB\\SQLEXPRESS; database=MedicalStore; trusted_connection=true; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -99,6 +97,7 @@ public partial class MedicalStoreContext : DbContext
                 .HasColumnType("decimal(10, 2)");
             entity.Property(e => e.GrandTotal).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.InvoiceNumber).HasMaxLength(50);
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PaymentMode).HasMaxLength(20);
             entity.Property(e => e.TaxAmount)
                 .HasDefaultValue(0m)
@@ -107,6 +106,11 @@ public partial class MedicalStoreContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.Bills)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK__Bills__CustomerI__619B8048");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Bills)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Bills_Orders");
         });
 
         modelBuilder.Entity<BillDetail>(entity =>
@@ -158,17 +162,15 @@ public partial class MedicalStoreContext : DbContext
         {
             entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B887A2DA4C");
 
-            entity.Property(e => e.CustomerId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.Address).HasMaxLength(200);
             entity.Property(e => e.City).HasMaxLength(20);
             entity.Property(e => e.ContactNumber).HasMaxLength(15);
             entity.Property(e => e.CustomerName).HasMaxLength(100);
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
-            entity.HasOne(d => d.CustomerNavigation).WithOne(p => p.Customer)
-                .HasForeignKey<Customer>(d => d.CustomerId)
+            entity.HasOne(d => d.User).WithMany(p => p.Customers)
+                .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Customers_Users");
         });
@@ -192,14 +194,43 @@ public partial class MedicalStoreContext : DbContext
             entity.Property(e => e.DeliveryStatus)
                 .HasMaxLength(50)
                 .HasDefaultValue("Pending");
+            entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
             entity.HasOne(d => d.Bill).WithOne(p => p.Delivery)
                 .HasForeignKey<Delivery>(d => d.BillId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Delivery__BillID__6E01572D");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Deliveries)
                 .HasForeignKey(d => d.CustomerId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Delivery__Custom__6EF57B66");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Deliveries)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Delivery_Orders");
+        });
+
+        modelBuilder.Entity<DeliveryDetail>(entity =>
+        {
+            entity.HasKey(e => e.DeliveryDetailId).HasName("PK__Delivery__EFD2C28751441CDF");
+
+            entity.Property(e => e.DeliveryDetailId).HasColumnName("DeliveryDetailID");
+            entity.Property(e => e.AddedOn)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime")
+                .HasColumnName("Added_On");
+            entity.Property(e => e.DeliveryId).HasColumnName("DeliveryID");
+            entity.Property(e => e.MedicineId).HasColumnName("MedicineID");
+
+            entity.HasOne(d => d.Delivery).WithMany(p => p.DeliveryDetails)
+                .HasForeignKey(d => d.DeliveryId)
+                .HasConstraintName("FK__DeliveryD__Deliv__503BEA1C");
+
+            entity.HasOne(d => d.Medicine).WithMany(p => p.DeliveryDetails)
+                .HasForeignKey(d => d.MedicineId)
+                .HasConstraintName("FK__DeliveryD__Medic__51300E55");
         });
 
         modelBuilder.Entity<DeliveryPayment>(entity =>
@@ -449,14 +480,17 @@ public partial class MedicalStoreContext : DbContext
             entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC552536F6");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.Password).HasMaxLength(255);
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.UserName).HasMaxLength(100);
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Users__RoleID__08B54D69");
         });
 

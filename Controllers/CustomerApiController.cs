@@ -1,6 +1,8 @@
 ﻿using Medical_Store.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medical_Store.Controllers
 {
@@ -17,6 +19,7 @@ namespace Medical_Store.Controllers
         #endregion
         #region GetAllCustomers 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetCustomer()
         {
             var customers = _context.Customers.ToList();
@@ -25,6 +28,7 @@ namespace Medical_Store.Controllers
         #endregion
         #region GetCustomerById 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetCustomerById(int id)
         {
             var customers = _context.Customers.Find(id);
@@ -36,6 +40,7 @@ namespace Medical_Store.Controllers
         }
         #endregion
         #region DeleteCustomerById 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteCustomerById(int id)
         {
@@ -50,6 +55,7 @@ namespace Medical_Store.Controllers
         }
         #endregion
         #region InsertCustomer 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult InsertCustomer(Customer customer)
         {
@@ -58,7 +64,9 @@ namespace Medical_Store.Controllers
             return NoContent();
         }
         #endregion
-        #region UpdateCustomer 
+
+        #region UpdateCustomer
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult UpdateCustomer(int id, Customer customer)
         {
@@ -81,5 +89,45 @@ namespace Medical_Store.Controllers
             return NoContent();
         }
         #endregion
+
+        #region UserDropDown
+        // Get all Users (for dropdown)
+        [HttpGet("dropdown/Users")]
+        [Authorize(Roles = "Admin ,Customer")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsers()
+        {
+            return await _context.Users
+                .Select(c => new { c.UserId, c.UserName })
+                .ToListAsync();
+        }
+        #endregion
+
+        // Advanced Filtering Endpoint
+        #region FilterCustomers
+        [HttpGet("filter")]
+        [Authorize(Roles = "Admin,Customer")]
+        public async Task<ActionResult<IEnumerable<Customer>>> Filter(
+            [FromQuery] string? name,
+            [FromQuery] string? city,
+            [FromQuery] string? username)
+        {
+            var query = _context.Customers
+                .Include(c => c.User) // optional, if you want user info
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(c => c.CustomerName.Contains(name));
+
+            if (!string.IsNullOrEmpty(city))
+                query = query.Where(c => c.City != null && c.City.Contains(city));
+
+            if (!string.IsNullOrEmpty(username))
+                query = query.Where(c => c.User != null &&
+                                         c.User.UserName.Contains(username));
+
+            return await query.ToListAsync();
+        }
+        #endregion
+
     }
 }

@@ -12,13 +12,13 @@ namespace Medical_Store.Validators
             RuleFor(c => c.Email)
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
-            RuleFor(c => c.PasswordHash)
-                .NotEmpty().WithMessage("Password is required.")
-                .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
-                .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$").WithMessage("Password must contain at least one uppercase letter, one lowercase letter, and one number.");
-            RuleFor(c => c.RoleId)
-                .GreaterThan(0).WithMessage("Role ID must be greater than 0.")
-                .When(c => c.RoleId.HasValue); // Ensure RoleId is checked only if it has a value
+            //RuleFor(c => c.Password)
+            //    .NotEmpty().WithMessage("Password is required.")
+            //    .MinimumLength(6).WithMessage("Password must be at least 6 characters long.")
+            //    .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$").WithMessage("Password must contain at least one uppercase letter, one lowercase letter, and one number.");
+            //RuleFor(c => c.RoleId)
+            //    .GreaterThan(0).WithMessage("Role ID must be greater than 0.")
+            //    .When(c => c.RoleId.HasValue); // Ensure RoleId is checked only if it has a value
             
         }
     }

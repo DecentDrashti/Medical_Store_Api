@@ -1,6 +1,7 @@
 ﻿using Medical_Store.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Medical_Store.Controllers
 {
@@ -76,6 +77,38 @@ namespace Medical_Store.Controllers
             _context.Admins.Update(existingAdmin);
             _context.SaveChanges();
             return NoContent();
+        }
+        #endregion
+
+        #region UserDropDown
+        // Get all Users (for dropdown)
+        [HttpGet("dropdown/Users")]
+        public async Task<ActionResult<IEnumerable<object>>> GetUsers()
+        {
+            return await _context.Users
+                .Select(c => new { c.UserId, c.UserName })
+                .ToListAsync();
+        }
+        #endregion
+
+        #region FilterAdmin
+        [HttpGet("filter")]
+        public async Task<ActionResult<IEnumerable<Admin>>> Filter(
+            [FromQuery] string? FullName,
+            [FromQuery] string? UserName)
+        {
+            var query = _context.Admins
+                .Include(c => c.User) // optional, if you want user info
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(FullName))
+                query = query.Where(c => c.FullName.Contains(FullName));
+
+            if (!string.IsNullOrEmpty(UserName))
+                query = query.Where(c => c.User != null &&
+                                         c.User.UserName.Contains(UserName));
+
+            return await query.ToListAsync();
         }
         #endregion
     }

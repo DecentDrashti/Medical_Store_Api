@@ -73,6 +73,7 @@ namespace Medical_Store.Controllers
             }
             existingBill.InvoiceNumber = bill.InvoiceNumber;
             existingBill.CustomerId = bill.CustomerId;
+            existingBill.OrderId = bill.OrderId;
             existingBill.BillDate = bill.BillDate;
             existingBill.PaymentMode= bill.PaymentMode;
             existingBill.DiscountAmount = bill.DiscountAmount;

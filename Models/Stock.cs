@@ -15,6 +15,7 @@ public partial class Stock
     public int? QuantityAvailable { get; set; }
 
     public DateOnly? ExpiryDate { get; set; }
+
     [JsonIgnore]
     public virtual Medicine? Medicine { get; set; }
 }

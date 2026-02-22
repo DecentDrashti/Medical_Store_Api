@@ -7,12 +7,13 @@ namespace Medical_Store.Validators
     {
         public AdminValidator() {
             RuleFor(c => c.UserId)
-                .GreaterThan(0).WithMessage("User ID must be greater than 0.");
+                .NotEmpty().WithMessage("User Name is required.")
+                .WithName("User Name");
             RuleFor(c => c.FullName)
                 .NotEmpty().WithMessage("Admin name is required.")
                 .Length(3, 50).WithMessage("Admin name must be between 3 and 50 characters.")
                 .Matches("^[A-Za-z ]+$").WithMessage("Admin name can only contain letters and spaces.");
-            
+                
         }
     }
 }
